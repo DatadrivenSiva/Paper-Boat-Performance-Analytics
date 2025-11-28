@@ -1,0 +1,169 @@
+Project Title:  Paper Boat Performance Analytics
+Tools Used: MySQL
+
+1.Yearly Revenue, Profit & Growth
+SELECT 
+    Year,
+    SUM(Sales) AS Revenue, ,ko p m
+    SUM(Profit) AS Profit
+FROM paperboat_sales
+GROUP BY Year
+ORDER BY Year;
+Output:
+ 
+
+2.Top 10 Products by Revenue
+SELECT 
+    Product_ID,
+    Product_Category,
+    Sub_Category,
+    SUM(Sales) AS Revenue
+FROM paperboat_sales
+GROUP BY Product_ID, Product_Category, Sub_Category
+ORDER BY Revenue DESC
+LIMIT 10;
+Output:
+ 
+
+3.Category Performance (Revenue + Profit Margin)
+SELECT
+    Product_Category,
+    SUM(Sales) AS Revenue,
+    SUM(Profit) AS Profit,
+    ROUND(SUM(Profit)/SUM(Sales)*100,2) AS Profit_Margin_Pct
+FROM paperboat_sales
+GROUP BY Product_Category
+ORDER BY Revenue DESC;
+Output:
+ 
+
+4.Region-wise Sales Performance
+SELECT 
+    Region,
+    SUM(Sales) AS Revenue,
+    SUM(Units_Sold) AS Units
+FROM paperboat_sales
+GROUP BY Region
+ORDER BY Revenue DESC;
+Output:
+ 
+
+
+5.Distribution channel Revenue Split
+SELECT 
+    Distribution_Channel,
+    SUM(Sales) AS Revenue
+FROM paperboat_sales
+GROUP BY Distribution_Channel
+ORDER BY Revenue DESC;
+Output:
+ 
+
+6.Marketing Channel ROI
+SELECT 
+    Marketing_Channel,
+    SUM(Ad_Spend) AS Total_Ad_Spend,
+    SUM(Revenue_After_Ad) - SUM(Revenue_Before_Ad) AS Incremental_Revenue,
+    ROUND((SUM(Revenue_After_Ad) - SUM(Revenue_Before_Ad)) 
+            / NULLIF(SUM(Ad_Spend),0), 2) AS ROI
+FROM paperboat_sales
+GROUP BY Marketing_Channel
+ORDER BY ROI DESC;
+Output:
+ 
+
+
+7.Festival vs Non-Festival Revenue
+SELECT 
+    Is_Festival_Period,
+    SUM(Sales) AS Revenue,
+    SUM(Units_Sold) AS Units
+FROM paperboat_sales
+GROUP BY Is_Festival_Period;
+Output:
+ 
+
+
+8.Customer Segment Revenue (High/Medium/Low Value)
+SELECT
+    Customer_Segment,
+    COUNT(DISTINCT Customer_ID) AS Total_Customers,
+    SUM(Sales) AS Revenue
+FROM paperboat_sales
+GROUP BY Customer_Segment
+ORDER BY Revenue DESC;
+Output:
+ 
+
+
+ 9.New vs Returning Customers — Revenue
+SELECT
+    Customer_Type,
+    COUNT(DISTINCT Customer_ID) AS Total_Customers,
+    SUM(Sales) AS Revenue
+FROM paperboat_sales
+GROUP BY Customer_Type;
+Output:
+ 
+
+
+10.Top 10 Distributors
+SELECT 
+    Distributor_Name,
+    SUM(Sales) AS Revenue,
+    SUM(Units_Sold) AS Units
+FROM paperboat_sales
+GROUP BY Distributor_Name
+ORDER BY Revenue DESC
+LIMIT 10;
+Output:
+ 
+
+11. Inventory Reorder Alerts
+SELECT 
+    Date,
+    Product_ID,
+    Current_Stock,
+    Reorder_Point
+FROM paperboat_sales
+WHERE Current_Stock <= Reorder_Point
+ORDER BY Date;
+Output:
+ 
+
+
+12.Stock Turnover by Year
+SELECT 
+    Year,
+    AVG(CASE 
+           WHEN Average_Inventory > 0 
+           THEN COGS / Average_Inventory 
+         END) AS Avg_Stock_Turnover
+FROM paperboat_sales
+GROUP BY Year
+ORDER BY Year;
+Output:
+ 
+
+
+13.Season-wise Sales
+SELECT 
+    Season,
+    SUM(Sales) AS Revenue
+FROM paperboat_sales
+GROUP BY Season
+ORDER BY Revenue DESC;
+Output:
+ 
+
+
+14.Best Performing Pack Sizes
+SELECT 
+    Pack_Size,
+    SUM(Sales) AS Revenue,
+    SUM(Units_Sold) AS Units
+FROM paperboat_sales
+GROUP BY Pack_Size
+ORDER BY Revenue DESC;
+Output:
+ 
